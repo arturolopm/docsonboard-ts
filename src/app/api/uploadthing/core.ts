@@ -22,7 +22,7 @@ export const ourFileRouter = {
       return { userId: user.id }
     })
     .onUploadComplete(async ({ metadata, file }) => {
-      // This code RUNS ON YOUR SERVER after upload
+      // This code RUNS ON THE SERVER after upload
       const createdFile = await db.file.create({
         data: {
           key: file.key,
@@ -32,6 +32,11 @@ export const ourFileRouter = {
           uploadStatus: 'PROCESSING'
         }
       })
+      try {
+        const response = await fetch(
+          `https://uploadthing-prod.s3.us-west-2.amazonaws.com/${file.key}`
+        )
+      } catch (err) {}
     })
 } satisfies FileRouter
 
