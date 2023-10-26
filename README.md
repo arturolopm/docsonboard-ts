@@ -33,6 +33,19 @@ To get started with this project, run
 ```
 
 and copy the .env.example variables into a separate .env file, fill them out &
+
+Run the development server:
+
+```bash
+npm run dev
+# or
+yarn dev
+# or
+pnpm dev
+# or
+bun dev
+```
+
 and that's all you need to get started!
 
 ## License
