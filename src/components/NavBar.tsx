@@ -8,6 +8,7 @@ import {
 import { buttonVariants } from './ui/button'
 import { ArrowRight } from 'lucide-react'
 import UserAccountNav from './UserAccountNav'
+import MobileNav from './MobileNav'
 const NavBar = () => {
   const { getUser } = getKindeServerSession()
   const user = getUser()
@@ -21,7 +22,7 @@ const NavBar = () => {
             className='flex z-40 font-semibold'>
             <span>Docsonboard</span>
           </Link>
-          {/* todo: add mobile navbar */}
+          <MobileNav isAuth={!!user} />
           <div className='hidden items-center space-x-4 sm:flex'>
             {!user ? (
               <>

@@ -1,21 +1,18 @@
-import { cn } from '@/lib/utils'
-import './globals.css'
-import type { Metadata } from 'next'
-import { Inter } from 'next/font/google'
 import NavBar from '@/components/NavBar'
 import Providers from '@/components/Providers'
+import { cn } from '@/lib/utils'
+import { Inter } from 'next/font/google'
+import './globals.css'
 
 import 'react-loading-skeleton/dist/skeleton.css'
 import 'simplebar-react/dist/simplebar.min.css'
 
 import { Toaster } from '@/components/ui/toaster'
+import { constructMetaData } from './../lib/utils'
 
 const inter = Inter({ subsets: ['latin'] })
 
-export const metadata: Metadata = {
-  title: 'Docsonboard',
-  description: 'Basically chat with documents'
-}
+export const metadata = constructMetaData()
 
 export default function RootLayout({
   children
