@@ -76,21 +76,29 @@ const onUploadComplete = async ({
         }
       })
     }
+    // const flattedText = pageLevelDocs.map((doc) => {
+    //   return doc.pageContent
+    // })
+    // const joinedText = flattedText.join()
+
+    //  Create embeddings whith vectorized search pending for big documents
 
     // vectorize and index file
-    const pinecone = await getPineconeClient()
+    // const pinecone = await getPineconeClient()
 
-    const pineconeIndex = pinecone.Index('docsonboard')
+    // const pineconeIndex = pinecone.Index('docsonboard')
 
-    const embeddings = new OpenAIEmbeddings({
-      openAIApiKey: process.env.OPENAI_API_KEY
-    })
+    // const embeddings = new OpenAIEmbeddings({
+    //   openAIApiKey: process.env.OPENAI_API_KEY
+    // })
 
-    await PineconeStore.fromDocuments(pageLevelDocs, embeddings, {
-      pineconeIndex
-      // TODO: when upgrading to paid version of pinecone uncomment this line
-      // namespace: createdFile.id
-    })
+    // await PineconeStore.fromDocuments(pageLevelDocs, embeddings, {
+    //   pineconeIndex
+    //   // TODO: when upgrading to paid version of pinecone uncomment this line
+    //   // namespace: createdFile.id
+    // })
+
+    // When creating vectorized, migrate database and remove flattened text from Data since the search will use the vector
 
     await db.file.update({
       data: {

@@ -7,6 +7,7 @@ import { OpenAIEmbeddings } from 'langchain/embeddings/openai'
 import { PineconeStore } from 'langchain/vectorstores/pinecone'
 import { NextRequest } from 'next/server'
 import { OpenAIStream, StreamingTextResponse } from 'ai'
+import { PDFLoader } from 'langchain/document_loaders/fs/pdf'
 
 export const POST = async (req: NextRequest) => {
   // this is the endpoint to ask questions to files
@@ -39,21 +40,35 @@ export const POST = async (req: NextRequest) => {
     }
   })
 
-  // 1. vectorize message
-  const embeddings = new OpenAIEmbeddings({
-    openAIApiKey: process.env.OPENAI_API_KEY
+  const responseItem = await fetch(
+    `https://uploadthing-prod.s3.us-west-2.amazonaws.com/${file.key}`
+  )
+  const blob = await responseItem.blob()
+
+  const loader = new PDFLoader(blob)
+
+  const pageLevelDocs = await loader.load()
+
+  const flattedText = pageLevelDocs.map((doc) => {
+    return doc.pageContent
   })
+  const joinedText = flattedText.join()
 
-  const pinecone = await getPineconeClient()
+  // 1. vectorize message pending when scaling for large messages
+  // const embeddings = new OpenAIEmbeddings({
+  //   openAIApiKey: process.env.OPENAI_API_KEY
+  // })
 
-  const pineconeIndex = pinecone.Index('docsonboard')
+  // const pinecone = await getPineconeClient()
 
-  const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
-    pineconeIndex
-    // TODO: when upgrading to paid version of pinecone uncomment this line
-    // namespace: createdFile.id
-  })
-  const results = await vectorStore.similaritySearch(message, 4)
+  // const pineconeIndex = pinecone.Index('docsonboard')
+
+  // const vectorStore = await PineconeStore.fromExistingIndex(embeddings, {
+  //   pineconeIndex
+  //   // TODO: when upgrading to paid version of pinecone uncomment this line
+  //   // namespace: createdFile.id
+  // })
+  // const results = await vectorStore.similaritySearch(message, 4)
 
   const prevMessages = await db.message.findMany({
     where: {
@@ -94,7 +109,8 @@ export const POST = async (req: NextRequest) => {
   \n----------------\n
   
   CONTEXT:
-  ${results.map((r) => r.pageContent).join('\n\n')}
+${joinedText}
+  {results.map((r) => r.pageContent).join('\n\n')}
   
   USER INPUT: ${message}`
       }
