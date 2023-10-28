@@ -9,9 +9,11 @@ import { buttonVariants } from './ui/button'
 import { ArrowRight } from 'lucide-react'
 import UserAccountNav from './UserAccountNav'
 import MobileNav from './MobileNav'
-const NavBar = () => {
+import { getUserSubscriptionPlan } from '@/lib/stripe'
+const NavBar = async () => {
   const { getUser } = getKindeServerSession()
   const user = getUser()
+  const subscriptionPlan = await getUserSubscriptionPlan()
 
   return (
     <nav className='sticky h-14 inset-x-0 top-0 z-30 w-full border-b border-gray-200 bg-white/75 backdrop-blur-lg transition-all'>
@@ -22,7 +24,10 @@ const NavBar = () => {
             className='flex z-40 font-semibold'>
             <span>Docsonboard</span>
           </Link>
-          <MobileNav isAuth={!!user} />
+          <MobileNav
+            isAuth={!!user}
+            isSubscribed={subscriptionPlan?.isSubscribed}
+          />
           <div className='hidden items-center space-x-4 sm:flex'>
             {!user ? (
               <>

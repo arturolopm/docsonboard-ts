@@ -1,11 +1,17 @@
 /* eslint-disable react-hooks/exhaustive-deps */
 'use client'
-import { ArrowRight, Menu } from 'lucide-react'
+import { ArrowRight, Gem, Menu } from 'lucide-react'
 import Link from 'next/link'
 import { usePathname } from 'next/navigation'
 import { useEffect, useState } from 'react'
 
-const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
+const MobileNav = ({
+  isAuth,
+  isSubscribed
+}: {
+  isAuth: boolean
+  isSubscribed: boolean
+}) => {
   const [isOpen, setIsOpen] = useState<boolean>(false)
 
   const toggleOpen = () => setIsOpen((prev) => !prev)
@@ -71,6 +77,20 @@ const MobileNav = ({ isAuth }: { isAuth: boolean }) => {
                     Dashboard
                   </Link>
                 </li>
+                <li className=' my-3 h-px w-full bg-gray-300' />
+                {isSubscribed ? (
+                  <Link
+                    href={'/dashboard/billing'}
+                    className='flex items-center w-full font-semibold '>
+                    Manage Subsccription
+                  </Link>
+                ) : (
+                  <Link
+                    href={'/pricing'}
+                    className='flex items-center w-full font-semibold '>
+                    Upgrade <Gem className=' text-zinc-600 h-4 w-4 ml-1.5' />
+                  </Link>
+                )}
                 <li className=' my-3 h-px w-full bg-gray-300' />
                 <li>
                   <Link

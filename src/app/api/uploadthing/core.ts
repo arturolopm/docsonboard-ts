@@ -1,13 +1,12 @@
+import { PLANS } from '@/config/stripe'
 import { db } from '@/db'
+import { getPineconeClient } from '@/lib/pinecone'
+import { getUserSubscriptionPlan } from '@/lib/stripe'
 import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
-import { createUploadthing, type FileRouter } from 'uploadthing/next'
 import { PDFLoader } from 'langchain/document_loaders/fs/pdf'
 import { OpenAIEmbeddings } from 'langchain/embeddings/openai'
 import { PineconeStore } from 'langchain/vectorstores/pinecone'
-import { getPineconeClient } from '@/lib/pinecone'
-import { getUserSubscriptionPlan } from '@/lib/stripe'
-import { PLANS } from '@/config/stripe'
-import { metadata } from './../../layout'
+import { createUploadthing, type FileRouter } from 'uploadthing/next'
 
 const f = createUploadthing()
 const middleware = async () => {
