@@ -3,14 +3,21 @@ import Link from 'next/link'
 import { ArrowRight } from 'lucide-react'
 import { buttonVariants } from '@/components/ui/button'
 import Image from 'next/image'
+import { getKindeServerSession } from '@kinde-oss/kinde-auth-nextjs/server'
 
 export default function Home() {
+  const { getUser } = getKindeServerSession()
+  const user = getUser()
   return (
     <>
       <MaxWidthWrapper className=' mb-12 mt-28 sm:mt-40 flex flex-col items-center justify-center text-center'>
         {' '}
         <div className=' mx-auto mb-4 flex max-w-fit items-center justify-center space-x-2 overflow-hidden rounded-full border border-gray-200 bg-white px-7 py-2 shadow-md backdrop-blur transition-all hover:border-green-300 hover:bg-white/50'>
-          <p className='text-sm font-semibold text-gray-700'>Learn Faster!</p>
+          <a
+            href='https://github.com/arturolopm'
+            className='text-sm font-semibold text-gray-700 underline'>
+            by: @arturolopm
+          </a>
         </div>
         <h1 className='4xl text-5xl font-bold md:text-6xl lg:text-7xl'>
           Learn faster from your{' '}
@@ -21,13 +28,23 @@ export default function Home() {
           documents, learn faster, just upload your file and start having a
           converstion with it.
         </p>
+        <h3 className='mt-5 max-w-prose text-zinc-700 sm:text-lg'>
+          If you are interested in learning how it works, you can see the source
+          code of this project{' '}
+          <a
+            className=' underline'
+            href='https://github.com/arturolopm/docsonboard-ts'
+            target='_blank'
+            rel='noopener noreferrer'>
+            here
+          </a>
+        </h3>
         <Link
           className={buttonVariants({
             size: 'lg',
             className: 'mt-5'
           })}
-          href={'/dashboard'}
-          target='_blank'>
+          href={user ? '/dashboard' : '/sign-up'}>
           Start now <ArrowRight className=' ml-2 h-5 w-5' />{' '}
         </Link>
       </MaxWidthWrapper>
